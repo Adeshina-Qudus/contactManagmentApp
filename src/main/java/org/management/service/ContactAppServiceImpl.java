@@ -28,6 +28,11 @@ public class ContactAppServiceImpl implements ContactAppService {
     }
     @Override
     public void login(LoginRequest loginRequest) {
+        ContactApp foundAccount = contactAppRepository.findByEmail(loginRequest.getEmail());
+        if(!userExist(loginRequest.getEmail())) throw  new InvalidDetailsException();
+        if (!foundAccount.getPassword().equals(loginRequest.getPassword())) throw new InvalidDetailsException();
+        foundAccount.setLocked(false);
+        contactAppRepository.save(foundAccount);
     }
 
     @Override
