@@ -8,11 +8,9 @@ public class Mapper {
 
     public static ContactApp map(RegisterRequest registerRequest) {
         ContactApp newContactApp = new ContactApp();
-
-        newContactApp.setFirstname(registerRequest.getFirstname());
-        newContactApp.setLastname(registerRequest.getLastname());
+        newContactApp.setName(registerRequest.getName());
         newContactApp.setEmail(registerRequest.getEmail());
-        newContactApp.setPassword(registerRequest.getPassword());
+        newContactApp.setPhoneNumber(registerRequest.getPhoneNumber());
         newContactApp.setPassword(registerRequest.getPassword());
         return newContactApp;
     }

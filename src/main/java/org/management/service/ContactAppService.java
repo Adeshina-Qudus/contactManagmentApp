@@ -1,19 +1,19 @@
 package org.management.service;
 
-import org.management.dtos.requests.LoginRequest;
-import org.management.dtos.requests.RegisterRequest;
-import org.springframework.stereotype.Service;
+import org.management.data.model.Contact;
+import org.management.dtos.requests.*;
 
-@Service
+import java.util.List;
+
 public interface ContactAppService {
 
     void registration(RegisterRequest registerRequest);
     void login(LoginRequest loginRequest);
-    void addContact(String firstname, String lastname, String phoneNumber);
-    void deleteContact(String phoneNumber,String password);
-    void editProfile(String firstname,String lastname);
-    void deleteProfile(String firstname,String lastname);
-    void findContact(String firstname, String lastname, String phoneNumber);
-    void findAllContact(String password);
+    void addContact(AddContactRequest addContactRequest);
+    void deleteContact(DeleteContactRequest deleteContact);
+    void editProfile(EditProfileRequest editProfileRequest);
+    void deleteProfile(String email);
+    Contact findContact(FindContactRequest findContactRequest);
+    List<Contact> findAllContact(String email);
 
 }

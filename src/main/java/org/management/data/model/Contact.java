@@ -12,5 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
         private String name;
         private String phoneNumber;
         private String profile;
+        private String userId;
+
     }
 
