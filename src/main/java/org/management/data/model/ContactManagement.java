@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 @Data
-public class ContactApp {
+public class ContactManagement {
     @Id
     private String id;
     private String name;

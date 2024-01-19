@@ -49,7 +49,6 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Contact findContact(String id, String name) {
         List<Contact> contact = findAllContactBelongingTo(id);
-        System.out.println(contact.size());
         for (Contact contact1 : contact) {
             if (contact1.getName().equals(name)) {
                 return contact1;

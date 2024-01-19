@@ -3,7 +3,6 @@ package org.management.dtos.responses;
 import lombok.Data;
 
 @Data
-public class FindContactResponse {
-    private Object contact;
+public class DeleteProfileResponse {
     private String message;
 }

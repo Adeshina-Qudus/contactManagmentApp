@@ -2,19 +2,18 @@ package org.management.controller;
 
 import org.management.dtos.requests.*;
 import org.management.dtos.responses.*;
-import org.management.exceptions.ContactAppException;
-import org.management.service.ContactAppService;
+import org.management.exceptions.ContactManagementException;
+import org.management.service.ContactManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class ContactAppController {
+public class ContactManagementController {
 
     @Autowired
-    private ContactAppService contactAppService;
+    private ContactManagementService contactAppService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
@@ -23,7 +22,7 @@ public class ContactAppController {
             contactAppService.registration(registerRequest);
             registerResponse.setMessage("Account created successfully");
             return new ResponseEntity<>(new ApiResponse(true, registerResponse), HttpStatus.CREATED);
-        } catch (ContactAppException exception) {
+        } catch (ContactManagementException exception) {
             registerResponse.setMessage(exception.getMessage());
             return new ResponseEntity<>(new ApiResponse(false, registerResponse), HttpStatus.BAD_REQUEST);
         }
@@ -36,7 +35,7 @@ public class ContactAppController {
             contactAppService.login(loginRequest);
             loginResponse.setMessage("logged in successfully");
             return new ResponseEntity<>(new ApiResponse(true, loginResponse), HttpStatus.ACCEPTED);
-        } catch (ContactAppException exception) {
+        } catch (ContactManagementException exception) {
             loginResponse.setMessage(exception.getMessage());
             return new ResponseEntity<>(new ApiResponse(false, loginResponse), HttpStatus.BAD_REQUEST);
         }
@@ -48,23 +47,23 @@ public class ContactAppController {
         try {
             contactAppService.addContact(addContactRequest);
             addContactResponse.setMessage("Contact Added");
-            return new ResponseEntity<>(new ApiResponse(true, addContactRequest), HttpStatus.ACCEPTED);
-        } catch (ContactAppException exception) {
+            return new ResponseEntity<>(new ApiResponse(true, addContactResponse), HttpStatus.ACCEPTED);
+        } catch (ContactManagementException exception) {
             addContactResponse.setMessage(exception.getMessage());
-            return new ResponseEntity<>(new ApiResponse(false, addContactRequest), HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<>(new ApiResponse(false, addContactResponse), HttpStatus.NOT_IMPLEMENTED);
         }
     }
 
     @DeleteMapping("/deleteContact")
-    public ResponseEntity<?> deleterContact(@RequestBody DeleteContactRequest deleteContactRequest) {
+    public ResponseEntity<?> deleteContact(@RequestBody DeleteContactRequest deleteContactRequest) {
         DeleteContactResponse deleteContactResponse = new DeleteContactResponse();
         try {
             contactAppService.deleteContact(deleteContactRequest);
             deleteContactResponse.setMessage("Deleted");
-            return new ResponseEntity<>(new ApiResponse(true, deleteContactRequest), HttpStatus.GONE);
-        } catch (ContactAppException exception) {
+            return new ResponseEntity<>(new ApiResponse(true, deleteContactResponse), HttpStatus.GONE);
+        } catch (ContactManagementException exception) {
             deleteContactResponse.setMessage(exception.getMessage());
-            return new ResponseEntity<>(new ApiResponse(false, deleteContactRequest), HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<>(new ApiResponse(false, deleteContactResponse), HttpStatus.NOT_IMPLEMENTED);
         }
     }
 
@@ -72,22 +71,24 @@ public class ContactAppController {
     public ResponseEntity<?> editProfile(@RequestBody EditProfileRequest editProfileRequest) {
         EditProfileResponse editProfileResponse = new EditProfileResponse();
         try {
-            contactAppService.editProfile(editProfileRequest);
             editProfileResponse.setMessage("Edited");
-            return new ResponseEntity<>(new ApiResponse(true, editProfileRequest), HttpStatus.ACCEPTED);
-        } catch (ContactAppException exception) {
+            return new ResponseEntity<>(new ApiResponse(true, editProfileResponse), HttpStatus.ACCEPTED);
+        } catch (ContactManagementException exception) {
             editProfileResponse.setMessage(exception.getMessage());
-            return new ResponseEntity<>(new ApiResponse(false, editProfileRequest), HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<>(new ApiResponse(false, editProfileResponse), HttpStatus.NOT_IMPLEMENTED);
         }
     }
 
     @DeleteMapping("/deleteProfile/{email}")
-    public String deleteProfile(@PathVariable String email) {
+    public ResponseEntity<?> deleteProfile(@PathVariable("email") String email) {
+        DeleteProfileResponse  deleteProfileResponse = new DeleteProfileResponse();
         try {
             contactAppService.deleteProfile(email);
-            return "Deleted";
-        } catch (ContactAppException exception) {
-            return exception.getMessage();
+            deleteProfileResponse.setMessage("Delete");
+            return new ResponseEntity<>(new ApiResponse(true,deleteProfileResponse),HttpStatus.GONE);
+        } catch (ContactManagementException exception) {
+            deleteProfileResponse.setMessage(exception.getMessage());
+            return new ResponseEntity<>(new ApiResponse(false,deleteProfileResponse),HttpStatus.NOT_IMPLEMENTED);
         }
     }
 
@@ -95,21 +96,21 @@ public class ContactAppController {
     public ResponseEntity<?> findContact(@RequestBody FindContactRequest findContactRequest) {
         FindContactResponse findContactResponse = new FindContactResponse();
         try {
-            contactAppService.findContact(findContactRequest);
-            findContactResponse.setMessage("found");
-            return new ResponseEntity<>(new ApiResponse(true, findContactRequest), HttpStatus.FOUND);
-        } catch (ContactAppException exception) {
+            findContactResponse.setContact(contactAppService.findContact(findContactRequest));
+            return new ResponseEntity<>(new ApiResponse(true, findContactResponse), HttpStatus.FOUND);
+        } catch (ContactManagementException exception) {
             findContactResponse.setMessage(exception.getMessage());
-            return new ResponseEntity<>(new ApiResponse(false, findContactRequest), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse(false, findContactResponse), HttpStatus.NOT_FOUND);
         }
     }
     @GetMapping("/findAllContact/{email}")
-    public String findAllContact(@PathVariable String email){
+    public ResponseEntity<?> findAllContact(@PathVariable("email") String email){
+        FindAllContactResponse findAllContactResponse = new FindAllContactResponse();
         try {
-            contactAppService.findAllContact(email);
-            return "All contact";
-        }catch (ContactAppException exception){
-            return exception.getMessage();
+            findAllContactResponse.setAllContact(contactAppService.findAllContact(email));
+            return new ResponseEntity<>(new ApiResponse(true,findAllContactResponse),HttpStatus.FOUND);
+        }catch (ContactManagementException exception){
+            return new ResponseEntity<>(new ApiResponse(false,findAllContactResponse),HttpStatus.NOT_FOUND);
         }
     }
 }

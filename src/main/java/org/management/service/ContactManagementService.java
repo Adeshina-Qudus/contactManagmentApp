@@ -5,7 +5,7 @@ import org.management.dtos.requests.*;
 
 import java.util.List;
 
-public interface ContactAppService {
+public interface ContactManagementService {
 
     void registration(RegisterRequest registerRequest);
     void login(LoginRequest loginRequest);

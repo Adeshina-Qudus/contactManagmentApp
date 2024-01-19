@@ -3,7 +3,7 @@ package org.management.service;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.management.data.model.Contact;
-import org.management.data.repository.ContactAppRepository;
+import org.management.data.repository.ContactManagementRepository;
 import org.management.data.repository.ContactRepository;
 import org.management.dtos.requests.*;
 import org.management.exceptions.InvalidDetailsException;
@@ -15,17 +15,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class ContactAppServiceTest {
+class ContactManagementServiceTest {
 
     @Autowired
-    private ContactAppService contactAppService;
+    private ContactManagementService contactAppService;
     @Autowired
-    private ContactAppRepository contactAppRepository;
+    private ContactManagementRepository contactManagementRepository;
     @Autowired
     private ContactRepository contactRepository;
     @AfterEach
     public void doThisAfterEachTest(){
-        contactAppRepository.deleteAll();
+        contactManagementRepository.deleteAll();
         contactRepository.deleteAll();
     }
     @Test
@@ -155,7 +155,7 @@ class ContactAppServiceTest {
             loginRequest.setEmail("ade55@Gmail.com");
             loginRequest.setPassword("GoHome");
             contactAppService.login(loginRequest);
-            assertEquals(2, contactAppRepository.count());
+            assertEquals(2, contactManagementRepository.count());
         }
         @Test
         public void registerTwoAccountsLoginWithRightDetails_BothAddContactCountNumberOfContactEachAccountSavedTest () {
@@ -252,7 +252,7 @@ class ContactAppServiceTest {
             editProfileRequest.setName("lekan");
             editProfileRequest.setEmail("qudusa55@Gmail.com");
             contactAppService.editProfile(editProfileRequest);
-            assertEquals("lekan", contactAppRepository.findByEmail("qudusa55@Gmail.com").getName());
+            assertEquals("lekan", contactManagementRepository.findByEmail("qudusa55@Gmail.com").getName());
         }
     @Test
     public void registerAccountLoginAndDeleteProfile () {
@@ -267,7 +267,7 @@ class ContactAppServiceTest {
         loginRequest.setPassword("GoHard");
         contactAppService.login(loginRequest);
         contactAppService.deleteProfile( "qudusa55@Gmail.com");
-        assertEquals(0,contactAppRepository.count());
+        assertEquals(0, contactManagementRepository.count());
     }
     @Test
     public void registerAccountLoginAddContactFindContact(){
@@ -348,4 +348,5 @@ class ContactAppServiceTest {
         contactAppService.addContact(addContactRequest);
         assertEquals(3,contactRepository.count());
     }
+
 }
